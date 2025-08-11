@@ -3,72 +3,80 @@ from tqdm import tqdm
 
 
 from pie.feedback_self_refine.feedback import PieSRFFeedback
-from pie.feedback_self_refine.self_refine_feedback import PieSRF
+from pie.feedback_self_refine.task_init import PieSRFInit
+from pie.feedback_self_refine.task_iterate import PieSRFIterate
 from src.pie.task_init import PieInit
 from src.pie.task_iterate import PieIterate
 from src.pie.feedback import PieFeedback
 
 from src.utils import retry_parse_fail_prone_cmd
 
-CODEX = "code-davinci-002"
-GPT3 = "text-davinci-003"
-CHATGPT = "gpt-3.5-turbo"
-GPT4 = "gpt-4"
-ENGINE = "gpt-4.1-mini"
+import pandas as pd
+from prompt_lib.backends import openai_api
+
+from src.utils import Prompt
 
 
-@retry_parse_fail_prone_cmd
-def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, temperature: float):
+# TODO: refine those
+FEEDBACK_INIT_Q="# Why is this code slow?"
+FEEDBACK_ON_FEEDBACK_Q="# What wrong with this feedback?"
+ITERATE_Q="# Improved feedback:"
+# TODO: what should be the breaking sentence?
+PERFECT_FEEDBACK_WORDS="nothing wrong with this feedback"
 
-    # initialize all the required components
+class PieSRF():
+    def __init__(self, engine: str, temperature: float, max_tokens: int = 300) -> None:
+        self.engine = engine
+        self.max_tokens = max_tokens
+        self.temperature = temperature
 
-    # generation of the first fast version
-    task_init = PieInit(engine=ENGINE, prompt_examples="data/prompt/pie/init.txt", temperature=temperature)
+    @retry_parse_fail_prone_cmd
+    def get_self_refined_feedback(self, slow_code: str, max_attempts: int, temperature: float):
 
-    iterate_prompt = "data/prompt/pie/iterate.txt"
-    # # getting feedback
-    # if feedback_type == "naive":
-    #     task_feedback = lambda **kwargs: "It could be faster"
-    #     iterate_prompt = "data/prompt/pie/iterate_genericfb.txt"
+        # initialize all the required components
 
-    # elif feedback_type == "none":
-    #     task_feedback = lambda **kwargs: ""
-    #     iterate_prompt = "data/prompt/pie/iterate_nofb.txt"
+        # generation of the first fast version
+        task_init = PieSRFInit(engine=self.engine, temperature=self.temperature)
 
-    # else:
-    task_feedback = PieSRF(engine=ENGINE, temperature=temperature)
 
-    # iteratively improving the code
-    task_iterate = PieIterate(engine=ENGINE, prompt_examples=iterate_prompt, temperature=temperature)
+        task_feedback = PieSRFFeedback(engine=self.engine, temperature=temperature)
 
-    # Initialize the task
+        # iteratively improving the code
+        task_iterate = PieSRFIterate(engine=self.engine, temperature=temperature)
 
-    n_attempts = 0
+        # Initialize the task
 
-    log = []
-    feedback = None
+        n_attempts = 0
 
-    while n_attempts < max_attempts:
+        log = []
+        feedback = None
+        feedback_on_feedback = None
+        prev_feedback=None
 
-        if n_attempts == 0:
-            fast_code = task_init(slow_code=slow_code)
-        else:
-            fast_code = task_iterate(slow_code=slow_code, feedback=feedback)
+        while n_attempts < max_attempts:
 
-        # feedback = task_feedback(slow_code=slow_code)
-        feedback, fsr_logs = task_feedback.get_self_refined_feedback(slow_code=fast_code, temperature=temperature, max_attempts=max_attempts)
+            if n_attempts == 0:
+                feedback = task_init(slow_code=slow_code)
+            else:
+                prev_feedback=feedback
+                feedback = task_iterate(slow_code=slow_code, feedback=feedback, feedback_on_feedback=feedback_on_feedback)
 
-        log.append({"fast_code": fast_code, "feedback": feedback, "slow_code": slow_code, "fsr_logs": fsr_logs, "attempt": n_attempts})
-        show_example(**log[-1])
+            # feedback = task_feedback(slow_code=slow_code)
+            feedback_on_feedback = task_feedback(slow_code=slow_code, feedback=feedback)
 
-        if "this code is not slow" in feedback.lower():
-            break
+            log.append({"feedback": feedback, "feedback_on_feedback": feedback_on_feedback, "prev_feedback": prev_feedback, "attempt": n_attempts})
+            # show_example(**log[-1])
+            
 
-        slow_code = fast_code
+            # TODO: what should be the breaking sentence?
+            if PERFECT_FEEDBACK_WORDS in feedback_on_feedback.lower():
+                break
 
-        n_attempts += 1
+            # feedback = feedback
 
-    return log
+            n_attempts += 1
+
+        return feedback, log
 
 
 def show_example(**kwargs):

@@ -1,23 +1,23 @@
 import sys
 from typing import Dict, List
+from pie.feedback_self_refine.self_refine_feedback import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q, ITERATE_Q
 from src.utils import Prompt
 
 from prompt_lib.backends import openai_api
 
 
-class PieIterate(Prompt):
-    def __init__(self, engine: str, prompt_examples: str, temperature: float, feedback_type: str = "default") -> None:
+class PieSRFIterate(Prompt):
+    def __init__(self, engine: str, temperature: float) -> None:
         super().__init__(
             question_prefix="",
-            answer_prefix="# Improved version:\n",
+            answer_prefix="# Improved feedback:\n",
             intra_example_sep="\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )
         self.engine = engine
         self.count = 0
         self.temperature = temperature
-        self.make_prompt(prompt_examples=prompt_examples)
-        self.feedback_type = feedback_type
+        self.make_prompt(prompt_examples="./src/pie/feedback_self_refine/data/iterate.txt")
 
     def make_prompt(self, prompt_examples: str) -> str:
         with open(prompt_examples, "r") as f:
@@ -29,11 +29,12 @@ class PieIterate(Prompt):
         self,
         slow_code: str,
         feedback: str,
+        feedback_on_feedback: str,
     ) -> str:
-        generation_query = self.make_query(slow_code=slow_code, feedback=feedback)
+        generation_query = self.make_query(slow_code=slow_code, feedback=feedback, feedback_on_feedback=feedback_on_feedback)
 
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task iterate")
+        print("task SBF iterate")
         print(generation_query)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         output = openai_api.OpenaiAPIWrapper.call(
@@ -50,32 +51,35 @@ class PieIterate(Prompt):
             generated_code = generated_code.split("### END")[0]
 
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print("task iterate")
+        print("task SBF iterate")
         print(generated_code)
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-
         return generated_code.strip()
 
 
 
-    def make_query(self, slow_code: str, feedback: str) -> str:
-        instr = "# Why is this code slow?" if self.feedback_type == "default" else "# How to improve this code?"
+    def make_query(self, slow_code: str, feedback: str, feedback_on_feedback: str) -> str:
+        # instr = "# Why is this code slow?" if self.feedback_type == "default" else "# How to improve this code?"
         example_template = """{slow_code}
 
-{instr}
+{FEEDBACK_INIT_Q}
 
 {feedback}
 
-# Improved version:
+{FEEDBACK_ON_FEEDBACK_Q}
+
+{feedback_on_feedback}
+
+{ITERATE_Q}
 
 """     
-        query = example_template.format(slow_code=slow_code, feedback=feedback, instr=instr)
+        query = example_template.format(slow_code=slow_code, FEEDBACK_INIT_Q=FEEDBACK_INIT_Q, feedback=feedback, feedback_on_feedback=feedback_on_feedback, ITERATE_Q=ITERATE_Q, FEEDBACK_ON_FEEDBACK_Q=FEEDBACK_ON_FEEDBACK_Q)
 
         return f"{self.prompt}{query}"
 
 
 def test():
-    task_iterate = PieIterate(
+    task_iterate = PieSRFIterate(
         prompt_examples="data/prompt/pie/iterate.txt",
         engine="gpt-3.5-turbo",
         temperature=0.6

@@ -27,6 +27,10 @@ class PieInit(Prompt):
 
     def __call__(self, slow_code: str) -> str:
         generation_query = self.make_query(slow_code)
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("task init")
+        print(generation_query)
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
@@ -40,6 +44,11 @@ class PieInit(Prompt):
         # if by chance the end token is present in the generated code, remove it
         if "### END" in generated_code:
             generated_code = generated_code.split("### END")[0]
+
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        print("task init")
+        print(generated_code)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         return generated_code.strip()
 
 
