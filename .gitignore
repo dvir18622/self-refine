@@ -1,3 +1,7 @@
+# unignore special paths
+!running_results/
+
+
 data
 *.txt
 *.out
