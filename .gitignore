@@ -1,6 +1,6 @@
 # unignore special paths
 !running_results/
-
+!src/pie/feedback_self_refine/data/
 
 data
 *.txt

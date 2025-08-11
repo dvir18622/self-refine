@@ -1,0 +1,26 @@
+a, b = input().split()
+n = int(a + b)
+
+flag = False
+for i in range(n):
+    if i ** 2 == n:
+        flag = True
+        break
+
+print('Yes' if flag else 'No')
+
+
+# Why is this code slow?
+
+# This code is slow because it is using a brute force approach to find the square root of the input number. It is looping through every possible number starting from 0 until n. Note that the sqare root will be smaller than n, so at least half of the numbers it is looping through are unnecessary. At most, you need to loop through the numbers up to the square root of n.
+
+# What wrong with this feedback?
+
+# XXX (Feedback on the Feedack)
+
+# Improved feedback:
+
+# YYY improved feedback using XXX (the feedback on the feedback)
+
+### END ###
+
