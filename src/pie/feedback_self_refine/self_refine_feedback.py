@@ -3,6 +3,7 @@ from tqdm import tqdm
 
 
 from pie.feedback_self_refine.feedback import PieSRFFeedback
+from pie.feedback_self_refine.queries import PERFECT_FEEDBACK_WORDS
 from pie.feedback_self_refine.task_init import PieSRFInit
 from pie.feedback_self_refine.task_iterate import PieSRFIterate
 from src.pie.task_init import PieInit
@@ -15,14 +16,6 @@ import pandas as pd
 from prompt_lib.backends import openai_api
 
 from src.utils import Prompt
-
-
-# TODO: refine those
-FEEDBACK_INIT_Q="# Why is this code slow?"
-FEEDBACK_ON_FEEDBACK_Q="# What wrong with this feedback?"
-ITERATE_Q="# Improved feedback:"
-# TODO: what should be the breaking sentence?
-PERFECT_FEEDBACK_WORDS="nothing wrong with this feedback"
 
 class PieSRF():
     def __init__(self, engine: str, temperature: float, max_tokens: int = 300) -> None:

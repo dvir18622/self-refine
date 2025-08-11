@@ -1,6 +1,6 @@
 import sys
 from typing import Dict, List
-from pie.feedback_self_refine.self_refine_feedback import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q, ITERATE_Q
+from pie.feedback_self_refine.queries import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q, ITERATE_Q
 from src.utils import Prompt
 
 from prompt_lib.backends import openai_api
@@ -10,7 +10,7 @@ class PieSRFIterate(Prompt):
     def __init__(self, engine: str, temperature: float) -> None:
         super().__init__(
             question_prefix="",
-            answer_prefix="# Improved feedback:\n",
+            answer_prefix=ITERATE_Q+"\n",
             intra_example_sep="\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )

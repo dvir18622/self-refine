@@ -1,7 +1,7 @@
 import pandas as pd
 from prompt_lib.backends import openai_api
 
-from pie.feedback_self_refine.self_refine_feedback import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q
+from pie.feedback_self_refine.queries import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q
 from src.utils import Prompt
 
 
