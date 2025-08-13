@@ -5,7 +5,6 @@ flag = False
 for i in range(n):
     if i ** 2 == n:
         flag = True
-        break
 
 print('Yes' if flag else 'No')
 
@@ -20,13 +19,13 @@ while i * i <= n:
     if i * i == n:
         flag = True
         break
-    i += 1
+   i += 1
 
 print('Yes' if flag else 'No')
 
 ### END ###
 
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     cur = 0  # current index
@@ -44,7 +43,7 @@ def main():
 
 # Improved version:
 
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     target = 1
@@ -54,23 +53,20 @@ def main():
             target += 1
     print(N - remaining if remaining else -1)
 
-
-if __name__ == '__main__':
-    main()
-
 ### END ###
 
-import numpy as np
-
 N = int(input())
-n=int(np.sqrt(N))
-print(n**2)
-
+n = 0
+sqrt = 0
+while n ** 2 <= N:
+    sqrt = n
+    n += 1
+print(sqrt**2)
 
 # Improved version:
 
 N = int(input())
-n = int(N**0.5) 
+n = int(N**0.5)
 print(n**2)
 
 ### END ###
@@ -78,12 +74,11 @@ print(n**2)
 import numpy as np
 A = np.arange(1<<27,dtype=np.int32)
 
-
 a,b = map(int,input().split())
-if (a-b) % 2 == 0:
-  print((a+b)//2)
+if (a+b) % 2 == 0:
+    print((a+b)//2)
 else:
-  print('IMPOSSIBLE')
+    print('IMPOSSIBLE')
 
 # Improved version:
 
@@ -102,4 +97,3 @@ else:
     print(q)
 
 ### END ###
-

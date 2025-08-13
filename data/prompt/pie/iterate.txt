@@ -5,14 +5,12 @@ flag = False
 for i in range(n):
     if i ** 2 == n:
         flag = True
-        break
 
 print('Yes' if flag else 'No')
 
-
 # Why is this code slow?
 
-# This code is slow because it is using a brute force approach to find the square root of the input number. It is looping through every possible number starting from 0 until n. Note that the sqare root will be smaller than n, so at least half of the numbers it is looping through are unnecessary. At most, you need to loop through the numbers up to the square root of n.
+# This code is slow because it uses a brute force approach to find the integer square root of the input number, if one exists. It is looping through every possible number starting from 0 until n, when in fact it is sufficient to loop through the numbers up to the square root of n.
 
 # Improved version:
 
@@ -31,7 +29,7 @@ print('Yes' if flag else 'No')
 
 ### END ###
 
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     cur = 0  # current index
@@ -49,11 +47,11 @@ def main():
 
 # Why is this code slow?
 
-# This code is slow because it is using a brute force approach to search for the target number in the list of numbers. It is looping through the list for every target number, which can take a long time if the list is very large. A more efficient approach would be to use a data structure such as a hash table, which can perform lookups in constant time.
+# This code is slow because it uses a brute force approach to search for each target number in the list of numbers. It is looping through the list for every target number, which can take a long time if the list is very large. A simpler and more efficient approach would be to perform a single scan through the list, updating the target number as we proceed.
 
 # Improved version:
 
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     target = 1
@@ -63,27 +61,23 @@ def main():
             target += 1
     print(N - remaining if remaining else -1)
 
-
-if __name__ == '__main__':
-    main()
-
-
 ### END ###
 
-import numpy as np
-
 N = int(input())
-n=int(np.sqrt(N))
-print(n**2)
+n = sqrt = 0
+while n ** 2 <= N:
+    sqrt = n
+    n += 1
+print(sqrt**2)
 
 # Why is this code slow?
 
-# This code is slow because it is using numpy for calculating the square root of the input number. Numpy is much slower than using the built-in math module, which can calculate the square root faster.
+# This code is slow because it calculates the integer closest to the square root of the input number manually, instead of using a module suitable for performing such computations, such as the built-in math module.
 
 # Improved version:
 
 N = int(input())
-n = int(N**0.5) 
+n = int(N**0.5)
 print(n**2)
 
 ### END ###
@@ -91,16 +85,15 @@ print(n**2)
 import numpy as np
 A = np.arange(1<<27,dtype=np.int32)
 
-
 a,b = map(int,input().split())
-if (a-b) % 2 == 0:
-  print((a+b)//2)
+if (a+b) % 2 == 0:
+    print((a+b)//2)
 else:
-  print('IMPOSSIBLE')
+    print('IMPOSSIBLE')
 
 # Why is this code slow?
 
-# This code is slow because it is using numpy to calculate the range of numbers from 1 to 2^27. This is an extremely large range and numpy is slow at calculating such a large range. A more efficient approach would be to use a loop to calculate the range, which would be much faster.
+# This code is slow because it uses Numpy to calculate the range of numbers from 1 to 2^27. This is an extremely large range and Numpy is slow at calculating such a large range. This huge Numpy array is never actually used later in the code, so it’s just allocating a lot of memory and consumes a lot of time for no purpose (probably leftover from testing or benchmarking). Performance can be further improved by using the ‘sys’ module to read raw binary input, which is faster than the normal input() calls.
 
 # Improved version:
 
@@ -119,4 +112,3 @@ else:
     print(q)
 
 ### END ###
-

@@ -7,10 +7,8 @@ flag = False
 for i in range(n):
     if i ** 2 == n:
         flag = True
-        break
 
 print('Yes' if flag else 'No')
-
 
 # optimized version of the same code:
 
@@ -18,10 +16,12 @@ a, b = input().split()
 n = int(a + b)
 
 flag = False
-for i in range(1000):
-    if i ** 2 == n:
+i = 0
+while i * i <= n:
+    if i * i == n:
         flag = True
         break
+   i += 1
 
 print('Yes' if flag else 'No')
 
@@ -29,8 +29,7 @@ print('Yes' if flag else 'No')
 
 # slower version:
 
-# ABC148D - Brick Break
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     cur = 0  # current index
@@ -46,15 +45,9 @@ def main():
             break
     print(N - remaining if remaining else -1)
 
-
-if __name__ == '__main__':
-    main()
-
-
 # optimized version of the same code:
 
-# ABC148D - Brick Break
-def main():
+def brick_break():
     N, *A = map(int, open(0).read().split())
     remaining = 0
     target = 1
@@ -64,21 +57,15 @@ def main():
             target += 1
     print(N - remaining if remaining else -1)
 
-
-if __name__ == '__main__':
-    main()
-
 ### END ###
 
 # slower version:
 
-# 077 B
 import numpy as np
 
 N = int(input())
 n=int(np.sqrt(N))
 print(n**2)
-
 
 # optimized version of the same code:
 
@@ -102,7 +89,6 @@ for i in range(1, N):
     table[i:i + K] = np.minimum(table[i:i + K], np.abs(H[i:i + K] - H[i - 1]) + table[i - 1])
 
 print(table[N - 1])
-
 
 # optimized version of the same code:
 
@@ -129,10 +115,8 @@ for i in range(n):
   
 print(s)
 
-
 # optimized version of the same code:
 
-### 138-c
 n = int(input())
 v = [int(i) for i in input().split()]
 
@@ -146,7 +130,6 @@ print(ans)
 
 # slower version:
 
-# coding: utf-8
 n_S, n_T = 0, 0
 
 for c in input():
@@ -158,7 +141,6 @@ for c in input():
         else:
             n_T += 1
 print(n_S + n_T)
-
 
 # optimized version of the same code:
 
@@ -179,7 +161,6 @@ print(cnt_S + cnt_T)
 
 # slower version:
 
-# ABC125 C - GCD on Blackboard
 from fractions import gcd
 n = int(input())
 a = list(map(int, input().split()))
@@ -197,7 +178,6 @@ for i in range(n-1,0,-1):
 for i in range(n):
     ans = max(ans,gcd(l[i],r[i]))
 print(ans)
-
 
 # optimized version of the same code:
 
@@ -224,13 +204,11 @@ print(ans)
 import numpy as np
 A = np.arange(1<<27,dtype=np.int32)
 
-
 a,b = map(int,input().split())
-if (a-b) % 2 == 0:
-  print((a+b)//2)
+if (a+b) % 2 == 0:
+   print((a+b)//2)
 else:
-  print('IMPOSSIBLE')
-
+   print('IMPOSSIBLE')
 
 # optimized version of the same code:
 
@@ -249,4 +227,3 @@ else:
     print(q)
 
 ### END ###
-
