@@ -77,8 +77,8 @@ def show_example(**kwargs):
     print(f"\n\nFEEDBACK:\n{kwargs['feedback']}\n")
     print(f"\n\nFAST CODE:\n{kwargs['fast_code']}\n")
     print("-" * 100)
-    
-def run_over_slow_programs(slow_programs_file: str, max_attempts: int, outfile: str, feedback_type: str, temperature: float, backup_file: str = None):
+
+def run_over_slow_programs(slow_programs_file: str, max_attempts: int, outfile: str, feedback_type: str, temperature: float, num_examples: int, backup_file: str = None):
 
     slow_programs_df = pd.read_json(slow_programs_file, lines=True, orient="records")
     slow_programs_df["run_logs"] = None
@@ -92,7 +92,7 @@ def run_over_slow_programs(slow_programs_file: str, max_attempts: int, outfile: 
         results = []
 
     for i, row in tqdm(slow_programs_df.iterrows(), total=len(slow_programs_df)):
-        if i==1:
+        if i==num_examples:
             break
         if row["submission_id_v0"] in processed_inputs:
             continue
@@ -143,7 +143,8 @@ if __name__ == "__main__":
         args.add_argument("--feedback_type", type=str)
         args.add_argument("--temperature", type=float, default=0.0)
         args.add_argument("--backup_file", type=str)
-        
+        args.add_argument("--num_examples", type=int, required=True)
+
         args = args.parse_args()
         args.outfile = f"{args.outfile}.fb_{args.feedback_type}.temp_{args.temperature}.engine_{ENGINE}.jsonl"
         if os.path.exists(args.outfile):
@@ -153,4 +154,4 @@ if __name__ == "__main__":
                 v += 1
             args.outfile = args.outfile + f".v{v}"
             print(f"Output file {args.outfile} already exists. Adding a suffix to it (v{v})")
-        run_over_slow_programs(slow_programs_file=args.slow_programs_file, max_attempts=args.max_attempts, outfile=args.outfile, feedback_type=args.feedback_type, temperature=args.temperature, backup_file=args.backup_file)
+        run_over_slow_programs(slow_programs_file=args.slow_programs_file, max_attempts=args.max_attempts, outfile=args.outfile, feedback_type=args.feedback_type, temperature=args.temperature, backup_file=args.backup_file, num_examples=args.num_examples)
