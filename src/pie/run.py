@@ -144,8 +144,11 @@ if __name__ == "__main__":
         args.add_argument("--temperature", type=float, default=0.0)
         args.add_argument("--backup_file", type=str)
         args.add_argument("--num_examples", type=int, required=True)
+        args.add_argument("--model", type=str, default="gpt-4.1-mini")
 
         args = args.parse_args()
+        # Set the engine
+        ENGINE = args.model
         args.outfile = f"{args.outfile}.fb_{args.feedback_type}.temp_{args.temperature}.engine_{ENGINE}.jsonl"
         if os.path.exists(args.outfile):
             
