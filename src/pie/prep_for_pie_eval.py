@@ -36,7 +36,8 @@ if __name__ == "__main__":
     # Define expected arguments.
     parser.add_argument("model", type=str, help="Model name")
     parser.add_argument("input_file", type=str, help="Path to the input JSON file")
-    parser.add_argument("base_config_path", type=str, help="Base path for config files")
+    # !!! looks like base_config_path is not in use!!!!
+    # parser.add_argument("base_config_path", type=str, help="Base path for config files")
     parser.add_argument("base_output_path", type=str, help="Base path for output files")
     parser.add_argument("--num_attempts", type=int, default=4, help="Number of attempts")
     # Parse provided arguments.
