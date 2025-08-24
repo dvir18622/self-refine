@@ -5,7 +5,7 @@ num_trials: 1
 ignore_first_k: 0
 max_time_per_run: 10
 temp_dir: null
-model_generated_potentially_faster_code_col: "attempt_0_code"
+model_generated_potentially_faster_code_col: "final_attempt_code"
 slow_code_col: "input"
 reference_code_col: "target"
 is_prompt_based: false

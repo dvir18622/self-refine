@@ -24,6 +24,8 @@ def extract_attempt_codes(self_refine_output_path,
                 tmp[f"attempt_{i}_code"] = ""
             else:
                 tmp[f"attempt_{i}_code"] = row["run_logs"][i]["fast_code"]
+                # Set the final_attempt_code to the last attempt's code
+                tmp["final_attempt_code"] = row["run_logs"][i]["fast_code"]
 
         rows.append(tmp)
     # Convert the rows list to a DataFrame and save it to a JSON file.
