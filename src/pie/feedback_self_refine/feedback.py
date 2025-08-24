@@ -2,7 +2,7 @@ import pandas as pd
 from prompt_lib.backends import openai_api
 
 from pie.feedback_self_refine.queries import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q
-from src.utils import Prompt
+from src.utils import Prompt, log_call, log_response
 
 
 class PieSRFFeedback(Prompt):
@@ -24,11 +24,7 @@ class PieSRFFeedback(Prompt):
     
     def __call__(self, slow_code: str, feedback: str):
         generation_query = self.make_query(slow_code=slow_code, wrong_feedback=feedback)
-
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task SBF feedback")
-        print(generation_query)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        log_call(generation_query, origin="task SBF feedback")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
@@ -41,11 +37,7 @@ class PieSRFFeedback(Prompt):
         if "### END" in generated_feedback:
             generated_feedback = generated_feedback.split("### END")[0]
         
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print("task SBF feedback")
-        print(generated_feedback)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-
+        log_response(generated_feedback, origin="task SBF feedback")
         return generated_feedback.strip()
     
     def make_query(self, wrong_feedback: str, slow_code: str):

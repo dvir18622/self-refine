@@ -7,8 +7,8 @@ import scipy.stats
 import logging
 import os
 import difflib
-from rpy2.robjects.packages import importr
 import rpy2.robjects as robjects    
+from rpy2.robjects.packages import importr
 
 global base
 global stats

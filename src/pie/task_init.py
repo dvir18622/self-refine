@@ -1,5 +1,5 @@
 import pandas as pd
-from src.utils import Prompt
+from src.utils import Prompt, log_call, log_response
 
 from prompt_lib.backends import openai_api
 
@@ -27,10 +27,7 @@ class PieInit(Prompt):
 
     def __call__(self, slow_code: str) -> str:
         generation_query = self.make_query(slow_code)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task init")
-        print(generation_query)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        log_call(generation_query, origin="task init")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
@@ -45,10 +42,7 @@ class PieInit(Prompt):
         if "### END" in generated_code:
             generated_code = generated_code.split("### END")[0]
 
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print("task init")
-        print(generated_code)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        log_response(generated_code, origin="task init")
         return generated_code.strip()
 
 

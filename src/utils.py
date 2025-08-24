@@ -1,4 +1,5 @@
 import traceback
+import logging
 
 class Prompt:
     def __init__(
@@ -45,3 +46,25 @@ def retry_parse_fail_prone_cmd(
         return None
 
     return wrapper
+
+
+def log_call(call: str, origin: str):
+    logging.debug(
+f"""
+{origin}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{call}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+    )
+
+
+def log_response(response: str, origin: str):
+    logging.debug(
+f"""
+{origin}
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+{response}
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+"""
+    )

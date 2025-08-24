@@ -1,7 +1,7 @@
 import sys
 from typing import Dict, List
 from pie.feedback_self_refine.queries import FEEDBACK_INIT_Q, FEEDBACK_ON_FEEDBACK_Q, ITERATE_Q
-from src.utils import Prompt
+from src.utils import Prompt, log_call, log_response
 
 from prompt_lib.backends import openai_api
 
@@ -32,11 +32,7 @@ class PieSRFIterate(Prompt):
         feedback_on_feedback: str,
     ) -> str:
         generation_query = self.make_query(slow_code=slow_code, feedback=feedback, feedback_on_feedback=feedback_on_feedback)
-
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task SBF iterate")
-        print(generation_query)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        log_call(generation_query, origin="task SBF iterate")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
@@ -50,10 +46,7 @@ class PieSRFIterate(Prompt):
         if "### END" in generated_code:
             generated_code = generated_code.split("### END")[0]
 
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print("task SBF iterate")
-        print(generated_code)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        log_response(generated_code, origin="task SBF iterate")
         return generated_code.strip()
 
 

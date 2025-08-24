@@ -1,6 +1,6 @@
 import sys
 from typing import Dict, List
-from src.utils import Prompt
+from src.utils import Prompt, log_call, log_response
 
 from prompt_lib.backends import openai_api
 
@@ -31,11 +31,8 @@ class PieIterate(Prompt):
         feedback: str,
     ) -> str:
         generation_query = self.make_query(slow_code=slow_code, feedback=feedback)
+        log_call(generation_query, origin="task iterate")
 
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task iterate")
-        print(generation_query)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
@@ -49,10 +46,7 @@ class PieIterate(Prompt):
         if "### END" in generated_code:
             generated_code = generated_code.split("### END")[0]
 
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print("task iterate")
-        print(generated_code)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        log_response(generated_code, origin="task iterate")
 
         return generated_code.strip()
 

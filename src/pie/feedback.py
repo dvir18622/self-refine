@@ -1,7 +1,7 @@
 import pandas as pd
 from prompt_lib.backends import openai_api
 
-from src.utils import Prompt
+from src.utils import Prompt, log_call
 
 
 class PieFeedback(Prompt):
@@ -23,11 +23,7 @@ class PieFeedback(Prompt):
     
     def __call__(self, slow_code: str):
         generation_query = self.make_query(slow_code=slow_code)
-
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("task feedback")
-        print(generation_query)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        log_call(generation_query, origin="task feedback")
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
