@@ -44,7 +44,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Construct the output file path and extract the codes.
-    output_path = f"{args.base_output_path}/{args.model}/output.attempt_codes"
+    # Change the output file path to simpler for using in the run_all.py script.
+    output_path = f"{args.base_output_path}/output.attempt_codes"
+    # output_path = f"{args.base_output_path}/{args.model}/output.attempt_codes"
     extract_attempt_codes(
         self_refine_output_path=args.input_file,
         flattened_output_path=output_path,

@@ -149,7 +149,10 @@ if __name__ == "__main__":
         args = args.parse_args()
         # Set the engine
         ENGINE = args.model
-        args.outfile = f"{args.outfile}.fb_{args.feedback_type}.temp_{args.temperature}.engine_{ENGINE}.jsonl"
+
+        # Change the output file path to simpler for using in the run_all.py script.
+        args.outfile = f"{args.outfile}.jsonl"
+        # args.outfile = f"{args.outfile}.fb_{args.feedback_type}.temp_{args.temperature}.engine_{ENGINE}.jsonl"
         if os.path.exists(args.outfile):
             
             v = 0
