@@ -10,6 +10,7 @@ import tempfile
 PIE_RUN_OUTPUT_FILE="pie_run"
 
 FEEDBACK_TYPES = ["self-refine-feedback", "other-type"]
+# FEEDBACK_TYPES = ["none", "classic", "self-refine-feedback"]
 
 def main():
     # Set up logging

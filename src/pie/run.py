@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 from tqdm import tqdm
 
@@ -26,17 +27,24 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
     task_init = PieInit(engine=ENGINE, prompt_examples="data/prompt/pie/init.txt", temperature=temperature)
 
     iterate_prompt = "data/prompt/pie/iterate.txt"
-    # # getting feedback
-    # if feedback_type == "naive":
-    #     task_feedback = lambda **kwargs: "It could be faster"
-    #     iterate_prompt = "data/prompt/pie/iterate_genericfb.txt"
+    # getting feedback
+    if feedback_type == "naive":
+        task_feedback = lambda **kwargs: "It could be faster"
+        iterate_prompt = "data/prompt/pie/iterate_genericfb.txt"
 
-    # elif feedback_type == "none":
-    #     task_feedback = lambda **kwargs: ""
-    #     iterate_prompt = "data/prompt/pie/iterate_nofb.txt"
+    elif feedback_type == "none":
+        task_feedback = lambda **kwargs: ""
+        iterate_prompt = "data/prompt/pie/iterate_nofb.txt"
 
-    # else:
-    task_feedback = PieSRF(engine=ENGINE, temperature=temperature)
+    elif feedback_type== "classic":
+        task_feedback = PieFeedback(engine=ENGINE, prompt_examples="data/prompt/pie/feedback.txt", temperature=temperature)
+    
+    elif feedback_type == "self-refine-feedback":
+            task_feedback = PieSRF(engine=ENGINE, temperature=temperature)
+    
+    else:
+        logging.error(f"Unknown feedback type: {feedback_type}")
+        raise ValueError(f"Unknown feedback type: {feedback_type}")
 
     # iteratively improving the code
     task_iterate = PieIterate(engine=ENGINE, prompt_examples=iterate_prompt, temperature=temperature)
@@ -59,7 +67,7 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
         feedback, fsr_logs = task_feedback.get_self_refined_feedback(slow_code=fast_code, temperature=temperature, max_attempts=max_attempts)
 
         log.append({"fast_code": fast_code, "feedback": feedback, "slow_code": slow_code, "fsr_logs": fsr_logs, "attempt": n_attempts})
-        show_example(**log[-1])
+        # show_example(**log[-1])
 
         if "this code is not slow" in feedback.lower():
             break
