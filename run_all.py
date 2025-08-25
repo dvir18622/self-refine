@@ -8,6 +8,7 @@ import subprocess
 import yaml
 import tempfile
 import pandas as pd  # Add this import for handling JSONL files
+import matplotlib.pyplot as plt  # Add this import for plotting histograms
 
 PIE_RUN_OUTPUT_FILE="pie_run"
 RESULT_SUMMARY_FILE="result_summary.txt"
@@ -127,7 +128,7 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
     result_path = os.path.join(feedback_dir, RESULT_SUMMARY_FILE)
     with open(result_path, "w") as f:
         json.dump(result_summary, f, indent=4)
-
+        
     logging.info(f"Result summary saved to {result_path}")
     logging.info(f"Result Summary: {result_summary}")
 
@@ -170,8 +171,43 @@ def summary_results(perf_report_file: str) -> dict:
     summary["improved_programs"] = len(run_metrics_improved)
     summary["not_improved_programs"] = len(run_metrics_accurate) - len(run_metrics_improved)
     summary["improvement_rate"] = len(run_metrics_improved) / len(run_metrics) * 100 if len(run_metrics) > 0 else 0
-    
+
+    # Calculate final_attempt distribution
+    final_attempt_distribution = calculate_final_attempt_distribution(
+        run_metrics=pd.read_json(perf_report_file, lines=True, orient="records")
+    )
+
+    summary["final_attempt_distribution"] = final_attempt_distribution
+
     return summary
+
+def calculate_final_attempt_distribution(run_metrics: pd.DataFrame) -> dict:
+    """
+    Calculates the distribution of rows based on the 'final_attempt' field.
+
+    Args:
+        run_metrics (pd.DataFrame): DataFrame containing the run metrics.
+
+    Returns:
+        dict: A dictionary mapping 'final_attempt' values to their percentage of rows.
+    """
+    if "final_attempt" not in run_metrics.columns:
+        logging.error("'final_attempt' field not found in the data.")
+        raise ValueError("'final_attempt' field not found in the data.")
+
+    total_rows = len(run_metrics)
+    if total_rows == 0:
+        logging.error("The DataFrame is empty.")
+        raise ValueError("The DataFrame is empty.")
+
+    distribution = (
+        run_metrics["final_attempt"]
+        .value_counts(normalize=True)
+        .mul(100)
+        .to_dict()
+    )
+
+    return distribution
 
 if __name__ == "__main__":
     main()
