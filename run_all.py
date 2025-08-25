@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 import os
 from datetime import datetime
@@ -6,10 +7,12 @@ import sys
 import subprocess
 import yaml
 import tempfile
+import pandas as pd  # Add this import for handling JSONL files
 
 PIE_RUN_OUTPUT_FILE="pie_run"
+RESULT_SUMMARY_FILE="result_summary.txt"
 
-FEEDBACK_TYPES = ["self-refine-feedback", "other-type"]
+FEEDBACK_TYPES = ["self-refine-feedback", "none"]
 # FEEDBACK_TYPES = ["none", "classic", "self-refine-feedback"]
 
 def main():
@@ -67,7 +70,7 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
         "--slow_programs_file", "data/tasks/pie/codenet-python-test-1k.jsonl",
         "--max_attempts", "1",
         "--outfile", os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE),
-        "--feedback_type", "rich",
+        "--feedback_type", feedback_type,
         "--num_examples", str(args.num_examples),  # Convert to string
         "--model", args.model,
     ]
@@ -117,6 +120,58 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
     )
 
     logging.info(f"Completed running run_eval.py, output saved to {perf_report_file}")
+    
+    # Summarize the results
+    logging.info(f"Summarizing results")
+    result_summary = summary_results(perf_report_file)
+    result_path = os.path.join(feedback_dir, RESULT_SUMMARY_FILE)
+    with open(result_path, "w") as f:
+        json.dump(result_summary, f, indent=4)
+
+    logging.info(f"Result summary saved to {result_path}")
+    logging.info(f"Result Summary: {result_summary}")
+
+
+def summary_results(perf_report_file: str) -> dict:
+    """
+    Summarizes the results from the evaluation report.
+
+    Args:
+        perf_report_file (str): Path to the performance report JSONL file.
+
+    Returns:
+        dict: A summary of the results.
+    """
+    
+    # Load the performance report
+    run_metrics = pd.read_json(perf_report_file, lines=True, orient="records")
+
+    summary={"total_programs": len(run_metrics)}
+
+    # Filter rows where the accuracy is not almost 1 (same as in the pie-perf repo, run_eval.py, print summary function)
+    run_metrics_accurate = run_metrics[
+        (run_metrics[f"final_attempt_code_acc"] > 0.99) & (run_metrics["input_acc"] > 0.99)
+    ]
+    if run_metrics.empty:
+        logging.error(f"No valid run metrics found.")
+        raise ValueError("No valid run metrics found.")
+    
+    summary["total_programs_accurate"] = len(run_metrics_accurate)
+    summary["not_accurate_programs"] = len(run_metrics) - len(run_metrics_accurate)
+    summary["accuracy_rate"] = len(run_metrics_accurate) / len(run_metrics) * 100 if len(run_metrics) > 0 else 0
+
+    # All the programs where there was an improvment.
+    # Same as in the pie-perf repo, run_eval.py, print summary function
+    # Why "reference_time_mean" and not "input_time_mean"?????? CHECK!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    run_metrics_improved = run_metrics_accurate[
+        run_metrics_accurate[f"final_attempt_code_time_mean"] < run_metrics_accurate["reference_time_mean"]
+    ]
+
+    summary["improved_programs"] = len(run_metrics_improved)
+    summary["not_improved_programs"] = len(run_metrics_accurate) - len(run_metrics_improved)
+    summary["improvement_rate"] = len(run_metrics_improved) / len(run_metrics) * 100 if len(run_metrics) > 0 else 0
+    
+    return summary
 
 if __name__ == "__main__":
     main()
