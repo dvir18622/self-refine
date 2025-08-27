@@ -3,4 +3,4 @@ FEEDBACK_ON_FEEDBACK_Q="# What is wrong with this feedback?"
 # Another possible query: "# How can this feedback be improved?"
 ITERATE_Q="# Improved feedback:"
 # TODO: what should be the breaking sentence?
-PERFECT_FEEDBACK_WORDS="nothing wrong with this feedback"
+PERFECT_FEEDBACK_WORDS="# Problem in feedback: no"
