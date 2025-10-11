@@ -1,7 +1,7 @@
 import pandas as pd
 from prompt_lib.backends import openai_api
 
-from src.utils import Prompt, log_call
+from src.utils import Prompt, log_call, log_response
 
 
 class PieFeedback(Prompt):
@@ -35,6 +35,7 @@ class PieFeedback(Prompt):
         generated_feedback = openai_api.OpenaiAPIWrapper.get_first_response(output)
         if "### END" in generated_feedback:
             generated_feedback = generated_feedback.split("### END")[0]
+        log_response(generated_feedback, origin="task feedback")
         return generated_feedback.strip()
 
     def make_query(self, slow_code: str):
