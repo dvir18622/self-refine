@@ -68,3 +68,15 @@ f"""
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 """
     )
+
+# Sometimes gpt response may contain a code block with a template as below
+"""
+```python
+CODE HERE
+```
+"""
+def strip_gpt_python_script_template(response: str) -> str:
+    if response.startswith("```python"):
+        response = response[10:]
+        response = response[:-4]
+    return response

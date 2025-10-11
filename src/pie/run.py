@@ -9,7 +9,7 @@ from src.pie.task_init import PieInit
 from src.pie.task_iterate import PieIterate
 from src.pie.feedback import PieFeedback
 
-from src.utils import retry_parse_fail_prone_cmd
+from src.utils import retry_parse_fail_prone_cmd, strip_gpt_python_script_template
 
 CODEX = "code-davinci-002"
 GPT3 = "text-davinci-003"
@@ -60,8 +60,10 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
 
         if n_attempts == 0:
             fast_code = task_init(slow_code=slow_code)
+            fast_code = strip_gpt_python_script_template(fast_code)
         else:
             fast_code = task_iterate(slow_code=slow_code, feedback=feedback)
+            fast_code = strip_gpt_python_script_template(fast_code)
 
         if feedback_type == "self-refine-feedback":
             feedback, fsr_logs = task_feedback.get_self_refined_feedback(slow_code=fast_code, temperature=temperature, max_attempts=max_attempts)
