@@ -67,7 +67,7 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
             feedback, fsr_logs = task_feedback.get_self_refined_feedback(slow_code=fast_code, temperature=temperature, max_attempts=max_attempts)
             log.append({"fast_code": fast_code, "feedback": feedback, "slow_code": slow_code, "fsr_logs": fsr_logs, "attempt": n_attempts})
         else:
-            feedback = task_feedback(slow_code=slow_code)
+            feedback = task_feedback(slow_code=fast_code)
             log.append({"fast_code": fast_code, "feedback": feedback, "slow_code": slow_code, "attempt": n_attempts})
         # show_example(**log[-1])
 
