@@ -11,6 +11,7 @@ import pandas as pd  # Add this import for handling JSONL files
 import matplotlib.pyplot as plt  # Add this import for plotting histograms
 
 PIE_RUN_OUTPUT_FILE="pie_run"
+PIE_RUN_LOGS_FILE="pie_run_logs.txt"
 RESULT_SUMMARY_FILE="result_summary.txt"
 
 FEEDBACK_TYPES = ["self-refine-feedback", "none"]
@@ -66,6 +67,8 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
 
     # Run the refinement process
     logging.info(f"Starting pie/run.py")
+    pie_run_out_file = os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE) + ".jsonl"
+    logs_file_path = os.path.join(feedback_dir, PIE_RUN_LOGS_FILE)
     command = [
         "python", "-u", "src/pie/run.py",
         "--slow_programs_file", "data/tasks/pie/codenet-python-test-1k.jsonl",
@@ -74,8 +77,10 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
         "--feedback_type", feedback_type,
         "--num_examples", str(args.num_examples),  # Convert to string
         "--model", args.model,
+        "--log_level", "DEBUG"
     ]
-    subprocess.run(command, check=True)
+    with open(logs_file_path, "w") as logs_file:
+        subprocess.run(command, check=True, stdout=logs_file)
 
     pie_run_out_file = os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE) + ".jsonl"
     logging.info(f"Completed running pie/run.py, output saved to {pie_run_out_file}")

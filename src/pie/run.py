@@ -155,8 +155,16 @@ if __name__ == "__main__":
         args.add_argument("--backup_file", type=str)
         args.add_argument("--num_examples", type=int, required=True)
         args.add_argument("--model", type=str, default="gpt-4.1-mini")
+        args.add_argument("--log_level", type=str, default="INFO")
 
         args = args.parse_args()
+        # Set log level
+        logging.basicConfig(
+            level=args.log_level,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[logging.StreamHandler(sys.stdout)]
+        )
+
         # Set the engine
         ENGINE = args.model
 
