@@ -47,7 +47,7 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
         raise ValueError(f"Unknown feedback type: {feedback_type}")
 
     # iteratively improving the code
-    task_iterate = PieIterate(engine=ENGINE, prompt_examples=iterate_prompt, temperature=temperature)
+    task_iterate = PieIterate(engine=ENGINE, prompt_examples=iterate_prompt, temperature=temperature, feedback_type=feedback_type)
 
     # Initialize the task
 

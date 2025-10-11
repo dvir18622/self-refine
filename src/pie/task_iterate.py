@@ -63,7 +63,10 @@ class PieIterate(Prompt):
 # Improved version (only improved code, without any additional explnation):
 
 """     
+        
         query = example_template.format(slow_code=slow_code, feedback=feedback, instr=instr)
+        if self.feedback_type == "none":
+            query = f"{slow_code}\n# Improved version (only improved code, without any additional explnation):\n"
 
         return f"{self.prompt}{query}"
 
