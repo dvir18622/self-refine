@@ -112,7 +112,7 @@ def run_over_slow_programs(slow_programs_file: str, max_attempts: int, outfile: 
         row_copy = row.to_dict()
         try:
             run_logs = iterative_pie(slow_code=row["input"], max_attempts=max_attempts, feedback_type=feedback_type, temperature=temperature)
-            print(run_logs)
+            # print(run_logs)
             row_copy["run_logs"] = run_logs
             results.append(row_copy)
             if i % 20 == 0:
