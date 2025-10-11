@@ -9,7 +9,7 @@ class PieIterate(Prompt):
     def __init__(self, engine: str, prompt_examples: str, temperature: float, feedback_type: str = "default") -> None:
         super().__init__(
             question_prefix="",
-            answer_prefix="# Improved version:\n",
+            answer_prefix="# Improved version (only improved code, without any additional explnation):\n",
             intra_example_sep="\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )
@@ -60,7 +60,7 @@ class PieIterate(Prompt):
 
 {feedback}
 
-# Improved version:
+# Improved version (only improved code, without any additional explnation):
 
 """     
         query = example_template.format(slow_code=slow_code, feedback=feedback, instr=instr)

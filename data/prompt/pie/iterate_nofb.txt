@@ -8,7 +8,7 @@ for i in range(n):
 
 print('Yes' if flag else 'No')
 
-# Improved version:
+# Improved version (only improved code, without any additional explnation):
 
 a, b = input().split()
 n = int(a + b)
@@ -41,7 +41,7 @@ def brick_break():
             break
     print(N - remaining if remaining else -1)
 
-# Improved version:
+# Improved version (only improved code, without any additional explnation):
 
 def brick_break():
     N, *A = map(int, open(0).read().split())
@@ -63,7 +63,7 @@ while n ** 2 <= N:
     n += 1
 print(sqrt**2)
 
-# Improved version:
+# Improved version (only improved code, without any additional explnation):
 
 N = int(input())
 n = int(N**0.5)
@@ -80,7 +80,7 @@ if (a+b) % 2 == 0:
 else:
     print('IMPOSSIBLE')
 
-# Improved version:
+# Improved version (only improved code, without any additional explnation):
 
 import sys
 read = sys.stdin.buffer.read

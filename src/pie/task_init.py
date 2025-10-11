@@ -8,7 +8,7 @@ class PieInit(Prompt):
     def __init__(self, prompt_examples: str, engine: str, temperature: float) -> None:
         super().__init__(
             question_prefix="# slower version:\n",
-            answer_prefix="# optimized version of the same code:\n",
+            answer_prefix="# optimized version of the same code (only code, without any explnation):\n",
             intra_example_sep="\n\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )
