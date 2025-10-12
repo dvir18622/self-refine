@@ -1,6 +1,7 @@
 import pandas as pd
 from prompt_lib.backends import openai_api
 
+from pie.feedback_self_refine.queries import FEEDBACK_INIT_Q
 from src.utils import Prompt, log_call, log_response
 
 
@@ -8,7 +9,7 @@ class PieFeedback(Prompt):
     def __init__(self, engine: str, prompt_examples: str, temperature: float, max_tokens: int = 500) -> None:
         super().__init__(
             question_prefix="",
-            answer_prefix="# Why is this code slow?\n",
+            answer_prefix=FEEDBACK_INIT_Q+'\n',
             intra_example_sep="\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )
