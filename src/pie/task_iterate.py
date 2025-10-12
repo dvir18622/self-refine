@@ -9,7 +9,7 @@ class PieIterate(Prompt):
     def __init__(self, engine: str, prompt_examples: str, temperature: float, feedback_type: str = "default") -> None:
         super().__init__(
             question_prefix="",
-            answer_prefix="# Improved version (only improved code, without any additional explnation):\n",
+            answer_prefix="# Improved version (only improved code, without any additional explanation):\n",
             intra_example_sep="\n\n",
             inter_example_sep="\n\n### END ###n\n",
         )
@@ -53,20 +53,20 @@ class PieIterate(Prompt):
 
 
     def make_query(self, slow_code: str, feedback: str) -> str:
-        instr = "# Why is this code slow?" if self.feedback_type == "default" else "# How to improve this code?"
+        instr = "# Why is this code slow? (2-3 sentences)" if self.feedback_type == "default" else "# How to improve this code?"
         example_template = """{slow_code}
 
 {instr}
 
 {feedback}
 
-# Improved version (only improved code, without any additional explnation):
+# Improved version (only improved code, without any additional explanation):
 
 """     
         
         query = example_template.format(slow_code=slow_code, feedback=feedback, instr=instr)
         if self.feedback_type == "none":
-            query = f"{slow_code}\n# Improved version (only improved code, without any additional explnation):\n"
+            query = f"{slow_code}\n# Improved version (only improved code, without any additional explanation):\n"
 
         return f"{self.prompt}{query}"
 

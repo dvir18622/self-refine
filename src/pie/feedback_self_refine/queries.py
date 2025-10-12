@@ -1,6 +1,5 @@
-FEEDBACK_INIT_Q="# Why is this code slow?"
+FEEDBACK_INIT_Q="# Why is this code slow? (2-3 sentences)"
 FEEDBACK_ON_FEEDBACK_Q="# What is wrong with this feedback?"
 # Another possible query: "# How can this feedback be improved?"
-ITERATE_Q="# Improved feedback:"
-# TODO: what should be the breaking sentence?
-PERFECT_FEEDBACK_WORDS="nothing wrong with this feedback"
+ITERATE_Q="# Improved feedback (2-3 sentences):"
+PERFECT_FEEDBACK_WORDS="problem in feedback: no"
