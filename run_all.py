@@ -14,8 +14,7 @@ PIE_RUN_OUTPUT_FILE="pie_run"
 PIE_RUN_LOGS_FILE="pie_run_logs.txt"
 RESULT_SUMMARY_FILE="result_summary.txt"
 
-FEEDBACK_TYPES = ["self-refine-feedback", "none"]
-# FEEDBACK_TYPES = ["none", "classic", "self-refine-feedback"]
+FEEDBACK_TYPES = ["none", "classic", "self-refine-feedback"]
 
 def main():
     # Set up logging
@@ -72,7 +71,7 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
     command = [
         "python", "-u", "src/pie/run.py",
         "--slow_programs_file", "data/tasks/pie/codenet-python-test-1k.jsonl",
-        "--max_attempts", "1",
+        "--max_attempts", "3",
         "--outfile", os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE),
         "--feedback_type", feedback_type,
         "--num_examples", str(args.num_examples),  # Convert to string
@@ -82,7 +81,6 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
     with open(logs_file_path, "w") as logs_file:
         subprocess.run(command, check=True, stdout=logs_file)
 
-    pie_run_out_file = os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE) + ".jsonl"
     logging.info(f"Completed running pie/run.py, output saved to {pie_run_out_file}")
 
     # Run the prep_for_pie_eval.py script
