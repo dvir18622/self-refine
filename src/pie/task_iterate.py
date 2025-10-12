@@ -53,7 +53,9 @@ class PieIterate(Prompt):
 
 
     def make_query(self, slow_code: str, feedback: str) -> str:
-        instr = "# Why is this code slow? (2-3 sentences)" if self.feedback_type == "default" else "# How to improve this code?"
+        # The else part looks like a bug in the original code!!!
+        # instr = "# Why is this code slow? (2-3 sentences)" if self.feedback_type == "default" else "# How to improve this code?"
+        instr = "# Why is this code slow? (2-3 sentences)"
         example_template = """{slow_code}
 
 {instr}
