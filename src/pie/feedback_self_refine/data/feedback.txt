@@ -14,7 +14,9 @@ print('Yes' if flag else 'No')
 
 # What is wrong with this feedback?
 
-# The last sentence in the feedback is misleading since in fact, it is sufficient to loop through the numbers up to the square root of n, not just up to n/2. By including this suggestion in the feedback, computation can be further optimized.
+# Problem in feedback: yes
+
+# Explanation (2-3 sentences): The last sentence in the feedback is misleading since in fact, it is sufficient to loop through the numbers up to the square root of n, not just up to n/2. By including this suggestion in the feedback, computation can be further optimized.
 
 ### END ###
 
@@ -40,7 +42,9 @@ def brick_break():
 
 # What is wrong with this feedback?
 
-# The improvement suggested - using a hash table and performing lookups - is unnecessary. A simpler approach would be to perform a single scan through the list, updating the target number as we proceed. This approach is also more efficient, since it does not require maintaining a hash table, pointer chasing or resolution of possible hash collisions. In addition, hash table lookups ignore ordering by default - you’d still need to store positions and check them, which reintroduces complexity.
+# Problem in feedback: yes
+
+# Explanation (2-3 sentences): The improvement suggested - using a hash table and performing lookups - is unnecessary. A simpler approach would be to perform a single scan through the list, updating the target number as we proceed. This approach is also more efficient, since it does not require maintaining a hash table, pointer chasing or resolution of possible hash collisions. In addition, hash table lookups ignore ordering by default - you’d still need to store positions and check them, which reintroduces complexity.
 
 ### END ###
 
@@ -54,11 +58,11 @@ print(sqrt**2)
 
 # Why is this code slow?
 
-# This code is slow because it calculates the integer closest to the square root of the input number manually, instead of using a library suitable for performing such computations, such as Numpy.
+# This code is slow because it calculates the integer closest to the square root of the input number manually, instead of using the built-in math module, which can calculate the square root faster.
 
 # What is wrong with this feedback?
 
-# The improvement suggested in the feedback is not efficient enough. In this case, Numpy is much slower than using the built-in math module, which can calculate the square root faster.
+# Problem in feedback: no
 
 ### END ###
 
@@ -77,6 +81,8 @@ else:
 
 # What is wrong with this feedback?
 
-# The feedback misses the important fact that the huge Numpy array is never actually used later in the code, so it’s just allocating a lot of memory and consumes a lot of time for no purpose (probably leftover from testing or benchmarking). Performance can be further improved by using the ‘sys’ module to read raw binary input, which is faster than the normal input() calls.
+# Problem in feedback: yes
+
+# Explanation (2-3 sentences): The feedback misses the important fact that the huge Numpy array is never actually used later in the code, so it’s just allocating a lot of memory and consumes a lot of time for no purpose (probably leftover from testing or benchmarking). Performance can be further improved by using the ‘sys’ module to read raw binary input, which is faster than the normal input() calls.
 
 ### END ###

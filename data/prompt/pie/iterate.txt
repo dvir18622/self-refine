@@ -12,7 +12,7 @@ print('Yes' if flag else 'No')
 
 # This code is slow because it uses a brute force approach to find the integer square root of the input number, if one exists. It is looping through every possible number starting from 0 until n, when in fact it is sufficient to loop through the numbers up to the square root of n.
 
-# Improved version (only improved code, without any additional explnation):
+# Improved version (only improved code, without any additional explanation):
 
 a, b = input().split()
 n = int(a + b)
@@ -49,7 +49,7 @@ def brick_break():
 
 # This code is slow because it uses a brute force approach to search for each target number in the list of numbers. It is looping through the list for every target number, which can take a long time if the list is very large. A simpler and more efficient approach would be to perform a single scan through the list, updating the target number as we proceed.
 
-# Improved version (only improved code, without any additional explnation):
+# Improved version (only improved code, without any additional explanation):
 
 def brick_break():
     N, *A = map(int, open(0).read().split())
@@ -74,7 +74,7 @@ print(sqrt**2)
 
 # This code is slow because it calculates the integer closest to the square root of the input number manually, instead of using a module suitable for performing such computations, such as the built-in math module.
 
-# Improved version (only improved code, without any additional explnation):
+# Improved version (only improved code, without any additional explanation):
 
 N = int(input())
 n = int(N**0.5)
@@ -95,7 +95,7 @@ else:
 
 # This code is slow because it uses Numpy to calculate the range of numbers from 1 to 2^27. This is an extremely large range and Numpy is slow at calculating such a large range. This huge Numpy array is never actually used later in the code, so it’s just allocating a lot of memory and consumes a lot of time for no purpose (probably leftover from testing or benchmarking). Performance can be further improved by using the ‘sys’ module to read raw binary input, which is faster than the normal input() calls.
 
-# Improved version (only improved code, without any additional explnation):
+# Improved version (only improved code, without any additional explanation):
 
 import sys
 read = sys.stdin.buffer.read
