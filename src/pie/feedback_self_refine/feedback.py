@@ -6,7 +6,7 @@ from src.utils import Prompt, log_call, log_response
 
 
 class PieSRFFeedback(Prompt):
-    def __init__(self, engine: str, temperature: float, max_tokens: int = 300) -> None:
+    def __init__(self, engine: str, temperature: float, max_tokens: int = 500) -> None:
         super().__init__(
             question_prefix="",
             answer_prefix=FEEDBACK_ON_FEEDBACK_Q+"\n",

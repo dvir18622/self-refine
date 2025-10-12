@@ -18,7 +18,7 @@ from prompt_lib.backends import openai_api
 from src.utils import Prompt
 
 class PieSRF():
-    def __init__(self, engine: str, temperature: float, max_tokens: int = 300) -> None:
+    def __init__(self, engine: str, temperature: float, max_tokens: int = 500) -> None:
         self.engine = engine
         self.max_tokens = max_tokens
         self.temperature = temperature

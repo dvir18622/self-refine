@@ -36,7 +36,7 @@ class PieSRFIterate(Prompt):
         output = openai_api.OpenaiAPIWrapper.call(
             prompt=generation_query,
             engine=self.engine,
-            max_tokens=300,
+            max_tokens=500,
             stop_token="### END",
             temperature=self.temperature,
         )
