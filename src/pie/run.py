@@ -73,7 +73,12 @@ def iterative_pie(slow_code: str, max_attempts: int, feedback_type: str, tempera
             log.append({"fast_code": fast_code, "feedback": feedback, "slow_code": slow_code, "attempt": n_attempts})
         # show_example(**log[-1])
 
-        if "this code is not slow" in feedback.lower():
+        if ("code is not slow" in feedback.lower()
+            or "code is not inherently slow" in feedback.lower()
+            or "code is efficient" in feedback.lower()
+            or "code is generally efficient" in feedback.lower()
+            or "code is already efficient" in feedback.lower()
+        ):
             break
 
         slow_code = fast_code
