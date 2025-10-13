@@ -62,7 +62,8 @@ class PieSRF():
             
 
             # TODO: what should be the breaking sentence?
-            if PERFECT_FEEDBACK_WORDS in feedback_on_feedback.lower():
+            if (PERFECT_FEEDBACK_WORDS in feedback_on_feedback.lower()
+                    or "Problem in feedback: **no" in feedback_on_feedback.lower()):
                 break
 
             # feedback = feedback
