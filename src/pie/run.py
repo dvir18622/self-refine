@@ -1,6 +1,7 @@
 import logging
 import pandas as pd
 from tqdm import tqdm
+import sys
 
 
 from pie.feedback_self_refine.feedback import PieSRFFeedback
@@ -171,6 +172,10 @@ if __name__ == "__main__":
             format='%(asctime)s - %(levelname)s - %(message)s',
             handlers=[logging.StreamHandler(sys.stdout)]
         )
+
+        # Ensure UTF-8 encoding for stdout and stderr
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
 
         # Set the engine
         ENGINE = args.model
