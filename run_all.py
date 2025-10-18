@@ -71,7 +71,7 @@ def run_feedback_type(feedback_type: str, args, dir_path: str):
     command = [
         "python", "-u", "src/pie/run.py",
         "--slow_programs_file", "data/tasks/pie/codenet-python-test-1k.jsonl",
-        "--max_attempts", "3",
+        "--max_attempts", "4",
         "--outfile", os.path.join(feedback_dir, PIE_RUN_OUTPUT_FILE),
         "--feedback_type", feedback_type,
         "--num_examples", str(args.num_examples),  # Convert to string
