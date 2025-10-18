@@ -1,4 +1,4 @@
-inputs_outputs_basepath: "C:/Users/dvir/Downloads/codenet/generated_test_cases"
+inputs_outputs_basepath: "PATH TO GENERATED TEST CASES FOLDER"
 reference_file_path: "data/tasks/pie/codenet-python-test-1k.jsonl"
 num_problems_to_evaluate: -1
 num_trials: 3
